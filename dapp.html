@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        <script src="https://wzrd.in/standalone/buffer"></script>
+       <script src="web3.min.js"></script>
+       <script src="https://unpkg.com/ipfs/dist/index.min.js"></script>
+	<script src="dappjs.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+    function gp()
+        {
+            yes.getHash(function(err,res){ if(!err) { 
+                document.getElementById("s").innerHTML=res;
+                 }});
+        }
+    
+function h()
+{
+    var f = ab.files[0];
+    console.log("file is",f);
+    let reader = new window.FileReader()
+    console.log("reader is",reader);
+    reader.readAsArrayBuffer(f);
+    reader.onload = function(event) {
+    // The file's text will be printed here
+    convertToBuffer(reader);
+  }
+  function convertToBuffer(reader)  {
+   // var a=document.getElementById("aa").value;
+     console.log(reader.result);
+      //file is converted to a buffer for upload to IPFS
+     const buf = buffer.Buffer(reader.result);
+     console.log("buffer",buf);     
+     const node = new Ipfs({ repo: 'ipfs-' + Math.random() });
+     node.once('ready', () => {
+     console.log('Online status: ', node.isOnline() ? 'online' : 'offline');
+     node.files.add(buf,function(err,ipfsHash)
+   {
+    if(!err)
+    {   
+        console.log(ipfsHash);
+        console.log(ipfsHash[0].hash)
+        yes.sendHash(ipfsHash[0].hash,function(err,res){ if(!err) { console.log(res); 
+            alert(res);
+        //document.getElementById("s1").innerHTML=res;
+        // web3.eth.getTransactionReceipt(res,function(err,txReceipt){
+        //     console.log(txReceipt.blockNumber);
+        //     document.getElementById("s2").innerHTML=txReceipt.blockNumber;
+        //     document.getElementById("s3").innerHTML=txReceipt.gasUsed;
+       // });
+      }});
+        console.log("done");
+      
+    }
+    })
+      //document.getElementById("status").innerHTML='Node status: ' + (node.isOnline() ? 'online' : 'offline');
+    }) 
+    
+}
+}
+ </script>
+<center>
+    
+        <input type = "file" id="ab"/>
+        <button onclick="h()">good</button>
+        <button onclick="gp()">Get Hashes</button>
+        
+
+        <!-- <div>
+        Tx Receipt Category
+        IPFS Hash # stored on Eth Contract:<h5 id="s"></h5>
+        Ethereum Contract Address:0xEA8e0b1940AC600b3ff8594B1f961188aFe31575
+        Tx Hash:: <h5 id="s1"></h5>
+        Block Number:<h5 id="s2"></h5>
+        Gas Used:<h5 id="s3"></h5>
+        </div> -->
+    </center>
+
+</body>
+</html>
